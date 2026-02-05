@@ -74,8 +74,8 @@ services:
     privileged: true
     command:
       - "-docker_only=true"
+      - "-disable_metrics=disk,diskIO,tcp,udp,percpu,sched,process"
       - "-housekeeping_interval=15s"
-      - "-disable_metrics=disk,tcp,udp,percpu,sched,process" # On allège un peu
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -83,6 +83,9 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    devices:
+      - /dev/kmsg
     networks:
       - traefik-public
     deploy:
