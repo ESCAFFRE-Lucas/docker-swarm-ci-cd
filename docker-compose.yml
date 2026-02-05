@@ -70,7 +70,7 @@ services:
         - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    image: gcr.io/cadvisor/cadvisor:v0.51.0
     privileged: true
     command:
       - "-docker_only=true"
