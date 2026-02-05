@@ -90,7 +90,6 @@ services:
     networks:
       - traefik-public
     deploy:
-      mode: global
       resources:
         limits:
           memory: 512M
