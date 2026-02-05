@@ -76,6 +76,27 @@ services:
     networks:
       - traefik-public
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks:
+      - traefik-public
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.http.routers.cadvisor.rule=Host(`cadvisor.monapp.13.38.83.103.nip.io`)"
+        - "traefik.http.services.cadvisor.loadbalancer.server.port=8080"
+
 volumes:
   db_data:
   grafana_data:
