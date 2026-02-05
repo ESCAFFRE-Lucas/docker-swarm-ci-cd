@@ -49,6 +49,8 @@ services:
     image: postgres:15
     environment:
       - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=mydatabase
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
