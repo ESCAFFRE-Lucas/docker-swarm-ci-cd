@@ -7,7 +7,6 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.swarmMode=true"
-      - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
@@ -22,11 +21,7 @@ services:
           - node.role == manager
 
   api:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/monapp:${IMAGE_TAG:-latest}
-    environment:
-      - ENV=production
-      - DB_HOST=db
-      - DB_PASS=password
+    image: m4cht/monapp:latest
     networks:
       - traefik-public
       - db_internal
@@ -42,38 +37,17 @@ services:
   db:
     image: postgres:15
     environment:
-      - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=mydatabase
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
       - db_internal
-    deploy:
-      replicas: 1
-
-  grafana:
-    image: grafana/grafana-enterprise
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=password
-    volumes:
-      - grafana_data:/var/lib/grafana
-    networks:
-      - traefik-public
-    deploy:
-      replicas: 1
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.grafana.rule=Host(`grafana.TON_IP.nip.io`)"
-        - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 
 volumes:
   db_data:
-  grafana_data:
 
 networks:
   traefik-public:
-    driver: overlay
+    external: true
   db_internal:
     driver: overlay
