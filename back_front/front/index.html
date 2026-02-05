@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend</title>
+</head>
+<body>
+    <h1>Frontend</h1>
+    <button onclick="callBackend()">Appeler Backend</button>
+    <pre id="response"></pre>
+
+    <script>
+        async function callBackend() {
+            try {
+                const response = await fetch('http://api.monapp.13.38.83.103.nip.io');
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = 'Erreur: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

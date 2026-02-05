@@ -20,20 +20,30 @@ services:
         constraints:
           - node.role == manager
 
-  api:
-    image: m4cht/monapp:latest
+  front:
+    image: m4cht/monapp-front:latest
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.http.routers.front.rule=Host(`monapp.13.38.83.103.nip.io`)"
+        - "traefik.http.services.front.loadbalancer.server.port=80"
+
+  back:
+    image: m4cht/monapp-back:latest
     networks:
       - traefik-public
       - db_internal
     deploy:
       replicas: 2
-      update_config:
-        order: start-first
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=traefik-public"
-        - "traefik.http.routers.monapp.rule=Host(`monapp.13.38.83.103.nip.io`)"
-        - "traefik.http.services.monapp.loadbalancer.server.port=3000"
+        - "traefik.http.routers.back.rule=Host(`api.monapp.13.38.83.103.nip.io`)"
+        - "traefik.http.services.back.loadbalancer.server.port=3000"
 
   db:
     image: postgres:15
@@ -44,8 +54,29 @@ services:
     networks:
       - db_internal
 
+  grafana:
+    image: grafana/grafana-enterprise
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.http.routers.grafana.rule=Host(`monitor.monapp.13.38.83.103.nip.io`)"
+        - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ~/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - traefik-public
+
 volumes:
   db_data:
+  grafana_data:
 
 networks:
   traefik-public:
