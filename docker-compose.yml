@@ -31,6 +31,7 @@ services:
         order: start-first
       labels:
         - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
         - "traefik.http.routers.monapp.rule=Host(`monapp.13.38.83.103.nip.io`)"
         - "traefik.http.services.monapp.loadbalancer.server.port=3000"
 
