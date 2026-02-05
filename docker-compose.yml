@@ -1,5 +1,6 @@
 services:
   api:
+    image: myapp:latest
     build:
       context: .
       dockerfile: .docker/Dockerfile
@@ -7,8 +8,10 @@ services:
       - "8080:3000"
     environment:
       - ENV=production
-    depends_on:
-      - db
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
   db:
     image: postgres:latest
     environment:
@@ -17,6 +20,8 @@ services:
         - POSTGRES_DB=mydatabase
     volumes:
       - db_data:/var/lib/postgresql/data
+    deploy:
+      replicas: 1
   grafana:
     image: grafana/grafana-enterprise
     restart: unless-stopped
@@ -27,6 +32,10 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=password
     volumes:
       - grafana_data:/var/lib/grafana
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 
 volumes:
   db_data:
