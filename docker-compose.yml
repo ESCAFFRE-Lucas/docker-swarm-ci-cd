@@ -74,8 +74,9 @@ services:
     privileged: true
     command:
       - "-docker_only=true"
-      - "-disable_metrics=disk,diskIO,tcp,udp,percpu,sched,process"
+      - "-storage_driver=overlay2"
       - "-housekeeping_interval=15s"
+      - "-disable_metrics=disk,diskIO,tcp,udp,percpu,sched,process"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
