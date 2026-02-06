@@ -106,9 +106,27 @@ services:
         - "traefik.http.routers.prom.rule=Host(`prom.monapp.51.44.21.112.nip.io`)"
         - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
 
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yml:/etc/loki/config.yml
+      - loki_data:/loki
+    command: -config.file=/etc/loki/config.yml
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./promtail-config.yml:/etc/promtail/config.yml
+      - /var/log:/var/log
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command: -config.file=/etc/promtail/config.yml
+
 volumes:
   db_data:
   grafana_data:
+  loki_data:
 
 networks:
   traefik-public:
