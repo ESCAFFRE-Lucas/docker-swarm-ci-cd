@@ -3,6 +3,8 @@ FROM node:18-alpine
  # Définir le répertoire de travail dans le conteneur
 WORKDIR /usr/src/app
 
+RUN apk --no-cache add curl
+
  # Copier les fichiers de dépendances et installer les paquets
 COPY package*.json ./
 RUN npm install

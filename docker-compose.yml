@@ -44,6 +44,12 @@ services:
         - "traefik.docker.network=traefik-public"
         - "traefik.http.routers.back.rule=Host(`api.monapp.51.44.21.112.nip.io`)"
         - "traefik.http.services.back.loadbalancer.server.port=3000"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   db:
     image: postgres:15
