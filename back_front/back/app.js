@@ -34,7 +34,7 @@ const server = http.createServer(async (req, res) => {
 
     if (req.url === '/test/cpu') {
         console.log('⚠️ Alerte : Début du test CPU !');
-        for (let i = 0; i < 5000 * 5000; i++) {
+        for (let i = 0; i < 10000 * 10000; i++) {
             Math.sqrt(Math.sqrt(i*i)+Math.sqrt(i*i));
         }
         console.log('✅ Fin du test CPU');
