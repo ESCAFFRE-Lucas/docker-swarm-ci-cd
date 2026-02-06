@@ -43,6 +43,19 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    if (req.url === '/test/freeze') {
+        console.log('❄️ ALERTE : GEL DU SERVEUR DANS 1 SECONDE !');
+        res.write("Le serveur va geler...");
+
+        setTimeout(() => {
+            console.log("❄️ C'est parti pour l'éternité...");
+            while(true) {
+                Math.random();
+            }
+        }, 100);
+        return;
+    }
+
     if (req.url === '/test/error') {
         console.error('❌ ERREUR CRITIQUE SIMULÉE !');
         res.writeHead(500);

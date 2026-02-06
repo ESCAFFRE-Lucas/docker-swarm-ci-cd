@@ -19,6 +19,10 @@
     <button onclick="startStressTest()">🚀 Lancer Stress Test (Mitraillette)</button>
     <button onclick="stopStressTest()">Arrêter Stress Test</button>
 
+    <hr>
+
+    <button onclick="triggerFreeze()" style="background-color: red; color: white;">❄️ FREEZE (Crash Test)</button>
+
     <pre id="response"></pre>
 
     <script>
@@ -34,6 +38,13 @@
 
         const API_URL = 'http://api.monapp.51.44.21.112.nip.io';
         let isStressing = false;
+
+        async function triggerFreeze() {
+            console.log("Envoi de la commande de gel...");
+            fetch(`${API_URL}/test/freeze`)
+                .then(() => console.log("Commande envoyée. Le back devrait mourir sous peu."))
+                .catch(e => console.log("Erreur réseau (normal si le back est déjà mort)"));
+        }
 
         async function triggerCpu() {
             fetch(`${API_URL}/test/cpu`).then(r => console.log("CPU Burned"));
