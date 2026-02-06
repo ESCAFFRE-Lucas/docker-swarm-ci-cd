@@ -24,7 +24,7 @@
     <script>
         async function callBackend() {
             try {
-                const response = await fetch('http://api.monapp.13.38.83.103.nip.io');
+                const response = await fetch('http://api.monapp.51.44.21.112.nip.io');
                 const data = await response.json();
                 document.getElementById('response').textContent = JSON.stringify(data, null, 2);
             } catch (error) {
@@ -32,7 +32,7 @@
             }
         }
 
-        const API_URL = 'http://api.monapp.13.38.83.103.nip.io';
+        const API_URL = 'http://api.monapp.51.44.21.112.nip.io';
         let isStressing = false;
 
         async function triggerCpu() {
