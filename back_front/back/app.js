@@ -32,6 +32,30 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    if (req.url === '/test/cpu') {
+        console.log('⚠️ Alerte : Début du test CPU !');
+        for (let i = 0; i < 5000 * 5000; i++) {
+            Math.sqrt(Math.sqrt(i*i)+Math.sqrt(i*i));
+        }
+        console.log('✅ Fin du test CPU');
+        res.writeHead(200);
+        res.end(JSON.stringify({ status: "CPU a bien chauffé 🔥" }));
+        return;
+    }
+
+    if (req.url === '/test/error') {
+        console.error('❌ ERREUR CRITIQUE SIMULÉE !');
+        res.writeHead(500);
+        res.end(JSON.stringify({ error: "Oups, tout est cassé" }));
+        return;
+    }
+
+    if (req.url === '/test/kill') {
+        console.warn('☠️ Arrêt du processus demandé...');
+        res.end("Adieu monde cruel...");
+        process.exit(1);
+    }
+
     try {
         await pool.query('INSERT INTO users DEFAULT VALUES');
         const { rows } = await pool.query('SELECT * FROM users');

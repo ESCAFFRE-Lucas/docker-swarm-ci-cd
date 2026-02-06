@@ -8,6 +8,17 @@
 <body>
     <h1>Frontend</h1>
     <button onclick="callBackend()">Appeler Backend</button>
+    <h1>Panneau de Contrôle Chaos 💥</h1>
+
+    <button onclick="triggerCpu()">🔥 Faire chauffer CPU (1 requête)</button>
+    <button onclick="triggerError()">❌ Générer Erreur 500</button>
+    <button onclick="killServer()">☠️ Tuer le Backend</button>
+
+    <hr>
+
+    <button onclick="startStressTest()">🚀 Lancer Stress Test (Mitraillette)</button>
+    <button onclick="stopStressTest()">Arrêter Stress Test</button>
+
     <pre id="response"></pre>
 
     <script>
@@ -19,6 +30,47 @@
             } catch (error) {
                 document.getElementById('response').textContent = 'Erreur: ' + error.message;
             }
+        }
+
+        const API_URL = 'http://api.monapp.13.38.83.103.nip.io';
+        let isStressing = false;
+
+        async function triggerCpu() {
+            fetch(`${API_URL}/test/cpu`).then(r => console.log("CPU Burned"));
+        }
+
+        async function triggerError() {
+            fetch(`${API_URL}/test/error`).then(r => console.log("Error triggered"));
+        }
+
+        async function killServer() {
+            fetch(`${API_URL}/test/kill`).catch(e => console.log("Server killed"));
+        }
+
+        function startStressTest() {
+            isStressing = true;
+            console.log("Démarrage du bombardement...");
+            loopRequests();
+        }
+
+        function stopStressTest() {
+            isStressing = false;
+            console.log("Arrêt du bombardement.");
+        }
+
+        function loopRequests() {
+            if (!isStressing) return;
+
+            const qInARow = 10;
+            for (let i = 0; i < qInARow; i++) {
+                fetch(`${API_URL}/test/cpu`).catch(e => console.error(e));
+            }
+
+            const minInterval = 500;
+            const maxRandom = 1000;
+            const delay = minInterval + Math.random() * maxRandom;
+
+            setTimeout(loopRequests, delay);
         }
     </script>
 </body>
